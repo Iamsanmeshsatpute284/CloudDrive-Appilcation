@@ -1,0 +1,109 @@
+function FilePreviewModal({ file, onClose }) {
+  if (!file) return null
+
+  const baseUrl = 'http://localhost:5000/uploads/'
+
+  const renderPreview = () => {
+    const { mimeType, storageKey, name } = file
+
+    // Image preview
+    if (mimeType?.startsWith('image/')) {
+      return (
+        <img
+          src={baseUrl + storageKey}
+          alt={name}
+          className="max-w-full max-h-[70vh] object-contain rounded-lg"
+        />
+      )
+    }
+
+    // PDF preview
+    if (mimeType === 'application/pdf') {
+      return (
+        <iframe
+          src={baseUrl + storageKey}
+          title={name}
+          className="w-full h-[70vh] rounded-lg border-0"
+        />
+      )
+    }
+
+    // Text preview
+    if (mimeType === 'text/plain') {
+      return (
+        <iframe
+          src={baseUrl + storageKey}
+          title={name}
+          className="w-full h-[70vh] rounded-lg border border-gray-200"
+        />
+      )
+    }
+
+    // Video preview
+    if (mimeType?.startsWith('video/')) {
+      return (
+        <video
+          src={baseUrl + storageKey}
+          controls
+          className="max-w-full max-h-[70vh] rounded-lg"
+        />
+      )
+    }
+
+    // Unsupported file type
+    return (
+      <div className="flex flex-col items-center justify-center h-48 text-gray-400">
+        <span className="text-6xl mb-4">📎</span>
+        <p className="text-gray-500 font-medium">Preview not available</p>
+        <p className="text-sm text-gray-400 mt-1">
+          This file type cannot be previewed
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    // Dark overlay background
+    // onClick on overlay closes modal
+    <div
+      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
+      {/* Modal box — stopPropagation prevents closing when clicking inside */}
+      <div
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Modal header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">
+              {file.mimeType?.startsWith('image/') ? '🖼️' :
+               file.mimeType === 'application/pdf' ? '📄' :
+               file.mimeType?.startsWith('video/') ? '🎥' : '📎'}
+            </span>
+            <div>
+              <h3 className="font-semibold text-gray-800">{file.name}</h3>
+              <p className="text-xs text-gray-400">{file.mimeType}</p>
+            </div>
+          </div>
+
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-800 cursor-pointer text-lg"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Preview area */}
+        <div className="p-6 overflow-auto">
+          {renderPreview()}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default FilePreviewModal
