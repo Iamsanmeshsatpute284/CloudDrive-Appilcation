@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar'
 import FileGrid from '../components/FileGrid'
 import Navbar from '../components/Navbar'
 import TrashView from '../components/TrashView'
+import RecentView from '../components/RecentView'
 
 function Dashboard() {
   const [currentFolder, setCurrentFolder] = useState(null)
@@ -14,10 +15,9 @@ function Dashboard() {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar view={view} setView={setView} />
         <main className="flex-1 overflow-auto p-6">
-          {/* Show TrashView for trash, FileGrid for everything else */}
-          {view === 'trash' ? (
-            <TrashView />
-          ) : (
+          {view === 'trash'  && <TrashView />}
+          {view === 'recent' && <RecentView />}
+          {(view === 'myDrive' || view === 'starred') && (
             <FileGrid
               currentFolder={currentFolder}
               setCurrentFolder={setCurrentFolder}
