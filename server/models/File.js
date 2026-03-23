@@ -20,6 +20,10 @@ const fileSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
+    thumbnailKey: {
+      type: String,
+      default: null
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -37,13 +41,15 @@ const fileSchema = new mongoose.Schema(
     deletedAt: {
       type: Date,
       default: null
+    },
+    // This field MUST exist for starring to work
+    isStarred: {
+      type: Boolean,
+      default: false
     }
   },
-  {
-    timestamps: true
-  }
+  { timestamps: true }
 )
 
 const File = mongoose.model('File', fileSchema)
-
 module.exports = File

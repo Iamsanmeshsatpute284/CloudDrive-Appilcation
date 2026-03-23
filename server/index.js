@@ -16,6 +16,11 @@ const File = require('./models/File')
 const Folder = require('./models/Folder')
 const fs = require('fs')
 
+let deleteThumbnail = () => {}
+try {
+  deleteThumbnail = require('./services/thumbnailService').deleteThumbnail
+} catch (e) {}
+
 dotenv.config()
 connectDB()
 
@@ -24,7 +29,17 @@ const app = express()
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }))
 app.use(express.json())
 app.use(cookieParser())
+
+// Prevent caching on all API routes
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+  res.set('Pragma', 'no-cache')
+  res.set('Expires', '0')
+  next()
+})
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use('/thumbnails', express.static(path.join(__dirname, 'uploads/thumbnails')))
 
 app.use('/api/auth', authRoutes)
 app.use('/api/folders', folderRoutes)
@@ -40,43 +55,30 @@ app.get('/', (req, res) => {
   res.json({ message: 'Cloud Drive API is running!' })
 })
 
-// ─────────────────────────────────────────
-// 🗑️ AUTO PURGE CRON — runs every day at midnight
-// Permanently deletes files AND folders in trash for 30+ days
-// ─────────────────────────────────────────
+// Auto purge cron
 cron.schedule('0 0 * * *', async () => {
   console.log('Running trash cleanup...')
   try {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-
-    // Purge expired files
-    const expiredFiles = await File.find({
-      isDeleted: true,
-      deletedAt: { $lt: thirtyDaysAgo }
-    })
+    const expiredFiles = await File.find({ isDeleted: true, deletedAt: { $lt: thirtyDaysAgo } })
     for (const file of expiredFiles) {
       const filePath = path.join(__dirname, 'uploads', file.storageKey)
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+      deleteThumbnail(file.thumbnailKey)
       await File.findByIdAndDelete(file._id)
     }
-
-    // Purge expired folders + files inside them
-    const expiredFolders = await Folder.find({
-      isDeleted: true,
-      deletedAt: { $lt: thirtyDaysAgo }
-    })
+    const expiredFolders = await Folder.find({ isDeleted: true, deletedAt: { $lt: thirtyDaysAgo } })
     for (const folder of expiredFolders) {
-      // Delete files inside the folder
       const folderFiles = await File.find({ folder: folder._id })
       for (const file of folderFiles) {
         const filePath = path.join(__dirname, 'uploads', file.storageKey)
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+        deleteThumbnail(file.thumbnailKey)
         await File.findByIdAndDelete(file._id)
       }
       await Folder.findByIdAndDelete(folder._id)
     }
-
-    console.log(`Purged ${expiredFiles.length} files and ${expiredFolders.length} folders from trash`)
+    console.log(`Purged ${expiredFiles.length} files and ${expiredFolders.length} folders`)
   } catch (error) {
     console.error('Trash cleanup error:', error.message)
   }

@@ -6,9 +6,9 @@ const { protect } = require('../middleware/authMiddleware')
 const {
   getFiles, uploadFile, downloadFile,
   renameFile, moveFile, deleteFile,
-  permanentDeleteFile,
-  getTrashedFiles, restoreFile,
-  toggleStar, getStarredFiles, searchFiles
+  permanentDeleteFile, getTrashedFiles,
+  restoreFile, toggleStar, getStarredFiles,
+  searchFiles, getRecentFiles
 } = require('../controllers/fileController')
 
 const storage = multer.diskStorage({
@@ -33,20 +33,19 @@ const upload = multer({ storage, fileFilter, limits: { fileSize: 50 * 1024 * 102
 
 router.use(protect)
 
-// Specific routes first
+// ─── Specific routes FIRST ───
 router.get('/trash', getTrashedFiles)
 router.get('/starred', getStarredFiles)
 router.get('/search', searchFiles)
+router.get('/recent', getRecentFiles)
+router.post('/upload', upload.single('file'), uploadFile)
 router.patch('/restore/:id', restoreFile)
 router.patch('/star/:id', toggleStar)
 router.patch('/move/:id', moveFile)
 router.get('/download/:id', downloadFile)
-router.post('/upload', upload.single('file'), uploadFile)
-
-// Permanent delete from trash
 router.delete('/permanent/:id', permanentDeleteFile)
 
-// General routes
+// ─── General routes LAST ───
 router.get('/', getFiles)
 router.patch('/:id', renameFile)
 router.delete('/:id', deleteFile)
