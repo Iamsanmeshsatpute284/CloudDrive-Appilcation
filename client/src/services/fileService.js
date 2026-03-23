@@ -40,6 +40,11 @@ export const restoreFile = async (id) => {
   return res.data
 }
 
+export const permanentDeleteFile = async (id) => {
+  const res = await api.delete(`/files/permanent/${id}`)
+  return res.data
+}
+
 export const toggleStar = async (id) => {
   const res = await api.patch(`/files/star/${id}`)
   return res.data.file
@@ -69,8 +74,8 @@ export const searchFiles = async (q) => {
   return res.data
 }
 
-// Permanently delete a file from trash
-export const permanentDeleteFile = async (id) => {
-  const res = await api.delete(`/files/permanent/${id}`)
-  return res.data
+// ✅ NEW — Get recent files (last 20 uploaded)
+export const getRecentFiles = async () => {
+  const res = await api.get('/files/recent')
+  return res.data.files
 }

@@ -1,9 +1,13 @@
 import axios from 'axios'
 
-// Create an axios instance with default config
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',  // your backend URL
-  withCredentials: true,                  // send cookies with every request
+  baseURL: 'https://clouddrive-appilcation.onrender.com/api',
+  withCredentials: true,
+  headers: {
+    // Prevent browser from caching API responses
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache'
+  }
 })
 
 export default api
