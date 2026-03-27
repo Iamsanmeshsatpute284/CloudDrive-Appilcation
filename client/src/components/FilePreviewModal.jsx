@@ -63,42 +63,40 @@ function FilePreviewModal({ file, onClose }) {
   }
 
   return (
-    // Dark overlay background
-    // onClick on overlay closes modal
     <div
-      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
-      {/* Modal box — stopPropagation prevents closing when clicking inside */}
+      {/* Modal box */}
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden"
+        className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-gray-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">
+            <span className="text-3xl">
               {file.mimeType?.startsWith('image/') ? '🖼️' :
                file.mimeType === 'application/pdf' ? '📄' :
                file.mimeType?.startsWith('video/') ? '🎥' : '📎'}
             </span>
             <div>
-              <h3 className="font-semibold text-gray-800">{file.name}</h3>
-              <p className="text-xs text-gray-400">{file.mimeType}</p>
+              <h3 className="font-semibold text-gray-800 text-lg">{file.name}</h3>
+              <p className="text-xs text-gray-500 font-medium">{file.mimeType}</p>
             </div>
           </div>
 
           {/* Close button */}
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-800 cursor-pointer text-lg"
+            className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-600 hover:text-gray-800 cursor-pointer text-xl transition-all duration-200 font-light"
           >
             ✕
           </button>
         </div>
 
         {/* Preview area */}
-        <div className="p-6 overflow-auto">
+        <div className="p-6 overflow-auto bg-white">
           {renderPreview()}
         </div>
       </div>

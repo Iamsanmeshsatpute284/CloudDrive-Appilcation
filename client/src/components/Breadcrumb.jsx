@@ -33,23 +33,23 @@ function Breadcrumb({ currentFolder, setCurrentFolder }) {
   if (!currentFolder) return null
 
   return (
-    <div className="flex items-center gap-1 text-sm mb-4 flex-wrap">
+    <div className="flex items-center gap-2 text-sm mb-6 flex-wrap bg-white px-4 py-3 rounded-lg border border-gray-200">
       <button
         onClick={() => setCurrentFolder(null)}
-        className="text-indigo-600 hover:underline font-medium cursor-pointer"
+        className="text-blue-600 hover:text-blue-700 font-semibold cursor-pointer transition-colors"
       >
         My Drive
       </button>
 
       {path.map((folder, index) => (
-        <span key={folder._id} className="flex items-center gap-1">
-          <span className="text-gray-400">›</span>
+        <span key={folder._id} className="flex items-center gap-2">
+          <span className="text-gray-400 font-light">/</span>
           {index === path.length - 1 ? (
-            <span className="text-gray-700 font-medium">{folder.name}</span>
+            <span className="text-gray-700 font-semibold">{folder.name}</span>
           ) : (
             <button
               onClick={() => setCurrentFolder(folder._id)}
-              className="text-indigo-600 hover:underline cursor-pointer"
+              className="text-blue-600 hover:text-blue-700 cursor-pointer font-medium transition-colors"
             >
               {folder.name}
             </button>

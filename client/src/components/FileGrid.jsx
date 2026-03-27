@@ -286,22 +286,22 @@ function FileGrid({ currentFolder, setCurrentFolder, view }) {
       {showActivity && <ActivityLog onClose={() => setShowActivity(false)} />}
 
       {/* Toolbar */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
           {view === 'myDrive' && !isSearching && '📁 My Drive'}
           {view === 'starred' && '⭐ Starred'}
           {isSearching && `🔍 Results for "${searchQuery}"`}
         </h2>
-        <div className="flex gap-2">
-          <button onClick={() => setShowActivity(true)} className="px-3 py-2 text-sm text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+        <div className="flex gap-3">
+          <button onClick={() => setShowActivity(true)} className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 hover:shadow-md transition-all cursor-pointer font-medium">
             📋 Activity
           </button>
           {view === 'myDrive' && (
             <>
-              <button onClick={() => setShowNewFolder(true)} className="flex items-center gap-2 px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg text-sm font-medium hover:bg-indigo-50 cursor-pointer">
+              <button onClick={() => setShowNewFolder(true)} className="flex items-center gap-2 px-4 py-2 border-2 border-blue-600 text-blue-600 rounded-lg text-sm font-semibold hover:bg-blue-50 hover:shadow-md transition-all cursor-pointer">
                 📁 New Folder
               </button>
-              <label className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 cursor-pointer">
+              <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-blue-600 hover:shadow-lg transition-all cursor-pointer">
                 ↑ Upload File
                 <input type="file" onChange={handleUpload} className="hidden" multiple />
               </label>
@@ -312,22 +312,22 @@ function FileGrid({ currentFolder, setCurrentFolder, view }) {
 
       {/* Drag hint */}
       {view === 'myDrive' && (
-        <div className="flex items-center gap-2 text-xs text-gray-400 mb-4 bg-indigo-50 px-4 py-2 rounded-lg">
+        <div className="flex items-center gap-2 text-xs text-gray-600 mb-4 bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-3 rounded-lg border border-blue-200">
           <span>💡</span>
-          <span>You can <strong className="text-indigo-600">drag & drop files</strong> anywhere to upload. Images show real thumbnails!</span>
+          <span>You can <strong className="text-blue-600 font-semibold">drag & drop files</strong> anywhere to upload. Images show real thumbnails!</span>
         </div>
       )}
 
       {/* Search */}
       {view === 'myDrive' && (
         <div className="relative mb-4">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg">🔍</span>
           <input
             type="text"
             value={searchQuery}
             onChange={handleSearch}
             placeholder="Search files and folders..."
-            className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white transition-all"
           />
         </div>
       )}
@@ -339,18 +339,18 @@ function FileGrid({ currentFolder, setCurrentFolder, view }) {
 
       {/* Upload progress */}
       {uploadingFiles.length > 0 && (
-        <div className="mb-4 bg-white rounded-xl border border-gray-200 p-4 space-y-3">
-          <p className="text-sm font-medium text-gray-700">
-            Uploading {uploadingFiles.length} file{uploadingFiles.length > 1 ? 's' : ''}...
+        <div className="mb-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200 p-5 space-y-4 shadow-sm">
+          <p className="text-sm font-semibold text-blue-900">
+            📤 Uploading {uploadingFiles.length} file{uploadingFiles.length > 1 ? 's' : ''}...
           </p>
           {uploadingFiles.map((f, i) => (
             <div key={i}>
-              <div className="flex justify-between text-xs text-gray-500 mb-1">
-                <span className="truncate max-w-xs">{f.name}</span>
-                <span>{f.progress}%</span>
+              <div className="flex justify-between text-xs text-blue-700 mb-2">
+                <span className="truncate max-w-xs font-medium">{f.name}</span>
+                <span className="font-semibold">{f.progress}%</span>
               </div>
-              <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                <div className="h-full bg-indigo-600 transition-all duration-300" style={{ width: `${f.progress}%` }} />
+              <div className="w-full h-2 bg-blue-200 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-300" style={{ width: `${f.progress}%` }} />
               </div>
             </div>
           ))}
@@ -359,7 +359,7 @@ function FileGrid({ currentFolder, setCurrentFolder, view }) {
 
       {/* New folder input */}
       {showNewFolder && view === 'myDrive' && (
-        <div className="flex gap-2 items-center mb-4 p-3 bg-white rounded-xl border border-gray-200">
+        <div className="flex gap-3 items-center mb-4 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200 shadow-sm">
           <input
             type="text"
             value={newFolderName}
@@ -367,14 +367,14 @@ function FileGrid({ currentFolder, setCurrentFolder, view }) {
             placeholder="Folder name"
             autoFocus
             onKeyDown={(e) => e.key === 'Enter' && handleCreateFolder()}
-            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex-1 border border-blue-300 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
           />
-          <button onClick={handleCreateFolder} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 cursor-pointer">Create</button>
-          <button onClick={() => setShowNewFolder(false)} className="px-4 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-100 cursor-pointer">Cancel</button>
+          <button onClick={handleCreateFolder} className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-blue-600 cursor-pointer transition-all shadow-md">Create</button>
+          <button onClick={() => setShowNewFolder(false)} className="px-4 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-100 cursor-pointer font-medium transition-all">Cancel</button>
         </div>
       )}
 
-      {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
+      {error && <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-lg mb-4 border border-red-200 font-medium shadow-sm">❌ {error}</div>}
 
       {loading ? (
         <div className="flex items-center justify-center h-48 text-gray-400">Loading...</div>
@@ -389,7 +389,7 @@ function FileGrid({ currentFolder, setCurrentFolder, view }) {
                   <div
                     key={folder._id}
                     onClick={() => setCurrentFolder(folder._id)}
-                    className="relative flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-gray-200 cursor-pointer hover:shadow-md hover:border-indigo-300 transition-all"
+                    className="relative flex flex-col items-center gap-2 p-4 bg-white rounded-lg border border-gray-200 cursor-pointer hover:shadow-lg hover:border-blue-400 hover:bg-blue-50 transition-all duration-200"
                   >
                     <div className="absolute top-2 right-2" onClick={(e) => e.stopPropagation()}>
                       <KebabMenu options={[
@@ -416,7 +416,7 @@ function FileGrid({ currentFolder, setCurrentFolder, view }) {
                   <div
                     key={file._id}
                     onClick={() => setPreviewFile(file)}
-                    className="relative flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border border-gray-200 hover:shadow-lg hover:border-indigo-300 transition-all min-h-[180px] cursor-pointer"
+                    className="relative flex flex-col items-center gap-2 p-4 bg-white rounded-lg border border-gray-200 hover:shadow-lg hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 min-h-[180px] cursor-pointer"
                   >
                     <div className="absolute top-3 right-3" onClick={(e) => e.stopPropagation()}>
                       <KebabMenu options={[

@@ -20,29 +20,29 @@ function Dashboard() {
   }, [])
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-gradient-to-b from-gray-50 to-white">
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar view={view} setView={handleViewChange} />
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto">
+          <div className="p-8">
+            {view === 'trash' && (
+              <TrashView key={`trash-${refreshKey}`} />
+            )}
 
-          {view === 'trash' && (
-            <TrashView key={`trash-${refreshKey}`} />
-          )}
+            {view === 'recent' && (
+              <RecentView key={`recent-${refreshKey}`} />
+            )}
 
-          {view === 'recent' && (
-            <RecentView key={`recent-${refreshKey}`} />
-          )}
-
-          {(view === 'myDrive' || view === 'starred') && (
-            <FileGrid
-              key={`${view}-${refreshKey}`}
-              currentFolder={currentFolder}
-              setCurrentFolder={setCurrentFolder}
-              view={view}
-            />
-          )}
-
+            {(view === 'myDrive' || view === 'starred') && (
+              <FileGrid
+                key={`${view}-${refreshKey}`}
+                currentFolder={currentFolder}
+                setCurrentFolder={setCurrentFolder}
+                view={view}
+              />
+            )}
+          </div>
         </main>
       </div>
     </div>
